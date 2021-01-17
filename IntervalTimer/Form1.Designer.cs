@@ -34,6 +34,7 @@ namespace IntervalTimer
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.lblProcessedTime = new System.Windows.Forms.Label();
             this.lblCurrentTime = new System.Windows.Forms.Label();
+            this.btnExit = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarOpacity)).BeginInit();
             this.SuspendLayout();
             // 
@@ -47,18 +48,20 @@ namespace IntervalTimer
             this.trackBarOpacity.Minimum = 10;
             this.trackBarOpacity.Name = "trackBarOpacity";
             this.trackBarOpacity.Size = new System.Drawing.Size(211, 19);
+            this.trackBarOpacity.SmallChange = 10;
             this.trackBarOpacity.TabIndex = 0;
             this.trackBarOpacity.TabStop = false;
+            this.trackBarOpacity.TickFrequency = 10;
             this.trackBarOpacity.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBarOpacity.Value = 100;
             this.trackBarOpacity.Scroll += new System.EventHandler(this.trackBarOpacity_Scroll);
-            this.trackBarOpacity.KeyUp += new System.Windows.Forms.KeyEventHandler(this.trackBarOpacity_KeyUp);
-            this.trackBarOpacity.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBarOpacity_MouseUp);
+            this.trackBarOpacity.MouseLeave += new System.EventHandler(this.trackBarOpacity_MouseLeave);
+            this.trackBarOpacity.MouseHover += new System.EventHandler(this.trackBarOpacity_MouseHover);
             // 
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 1000;
+            this.timer1.Interval = 300;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // lblProcessedTime
@@ -74,6 +77,7 @@ namespace IntervalTimer
             this.lblProcessedTime.Click += new System.EventHandler(this.lblProcessedTime_Click);
             this.lblProcessedTime.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.lblProcessedTime.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
+            this.lblProcessedTime.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.lblProcessedTime_PreviewKeyDown);
             // 
             // lblCurrentTime
             // 
@@ -89,6 +93,16 @@ namespace IntervalTimer
             this.lblCurrentTime.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.lblCurrentTime.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             // 
+            // btnExit
+            // 
+            this.btnExit.Location = new System.Drawing.Point(218, 82);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(75, 23);
+            this.btnExit.TabIndex = 2;
+            this.btnExit.Text = "exit";
+            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -96,6 +110,7 @@ namespace IntervalTimer
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(211, 122);
             this.ControlBox = false;
+            this.Controls.Add(this.btnExit);
             this.Controls.Add(this.lblCurrentTime);
             this.Controls.Add(this.lblProcessedTime);
             this.Controls.Add(this.trackBarOpacity);
@@ -122,6 +137,7 @@ namespace IntervalTimer
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label lblProcessedTime;
         private System.Windows.Forms.Label lblCurrentTime;
+        private System.Windows.Forms.Button btnExit;
     }
 }
 

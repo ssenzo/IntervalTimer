@@ -14,8 +14,10 @@ namespace IntervalTimer
     {
         private Point mousePoint;
         private DateTime startDateTime;
-        private string elapsedTimeShowType = "ELAPSED";
-
+        private DateTime lastPauseTime;
+        private TimeSpan totalPauseTime;
+        private bool paused;
+        
         public Form1()
         {
             InitializeComponent();
@@ -29,7 +31,14 @@ namespace IntervalTimer
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            this.CancelButton = btnExit;
+            paused = false;
+
+
             resetElapsedTime();
+
+            trackBarOpacity.Value = 60;
+            this.Opacity = 0.6;
 
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - this.Width, 
                                         Screen.PrimaryScreen.Bounds.Height - this.Height);
@@ -54,16 +63,17 @@ namespace IntervalTimer
             lblCurrentTime.Text = DateTime.Now.ToString("HH:mm:ss");
 
             TimeSpan timeDiff;
-            
-            if (elapsedTimeShowType == "ELAPSED")
+
+            timeDiff = DateTime.Now - startDateTime;
+
+            if (paused == true)
             {
-                timeDiff = DateTime.Now - startDateTime;
+                DateTime tempNow = DateTime.Now;
+                totalPauseTime = totalPauseTime.Add(tempNow - lastPauseTime);
+                lastPauseTime = tempNow;                
             }
-            else
-            {
-                timeDiff = startDateTime.AddHours(1) - DateTime.Now;
-            }
-            
+
+            timeDiff = timeDiff.Add(-totalPauseTime);
 
             lblProcessedTime.Text = timeDiff.Hours.ToString().PadLeft(2, '0')
                 + ':' + timeDiff.Minutes.ToString().PadLeft(2, '0')
@@ -73,6 +83,8 @@ namespace IntervalTimer
         private void resetElapsedTime()
         {
             startDateTime = DateTime.Now;
+            totalPauseTime = startDateTime - startDateTime;
+            timer1.Enabled = true;
         }
 
         private void lblCurrentTime_Click(object sender, EventArgs e)
@@ -82,14 +94,17 @@ namespace IntervalTimer
 
         private void lblProcessedTime_Click(object sender, EventArgs e)
         {
-            if (elapsedTimeShowType == "ELAPSED")
+            if (paused == false)
             {
-                elapsedTimeShowType = "REMAINED";
+                paused = true;
+                lastPauseTime = DateTime.Now;
             }
             else
             {
-                elapsedTimeShowType = "ELAPSED";
+                paused = false;
             }
+            
+            
         }
 
         private void trackBarOpacity_MouseUp(object sender, MouseEventArgs e)
@@ -99,15 +114,51 @@ namespace IntervalTimer
 
         private void trackBarOpacity_KeyUp(object sender, KeyEventArgs e)
         {
-            lblCurrentTime.Focus();
+           lblCurrentTime.Focus();
         }
-
+        
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
             {
                 this.Close();
             }
+        }
+
+        private void trackBarOpacity_MouseLeave(object sender, EventArgs e)
+        {
+            lblCurrentTime.Focus();
+        }
+
+        private void trackBarOpacity_MouseHover(object sender, EventArgs e)
+        {
+            trackBarOpacity.Focus();
+        }
+
+        private void lblProcessedTime_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                    this.Close();
+                    break;
+                case Keys.Space:
+                    if (timer1.Enabled == false) timer1.Enabled = true;
+                    else timer1.Enabled = false;
+                    break;
+                case Keys.Enter:
+                    resetElapsedTime();
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+
+        
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
